@@ -46,7 +46,11 @@ public class Tienda {
 	private String[][] carrito;
 	private String[][] carritoSecundario = new String[cursosDisponibles.length][cursosDisponibles[1].length];
 	
-	public void comprar() {
+	public Tienda() {
+		comprar();
+	}
+	
+	private void comprar() {
 		int opcion = 0;
 		crearCursos();
 		while (opcion != 7) {
@@ -78,11 +82,15 @@ public class Tienda {
 
 	}
 	
+	
+	
 	private void finalizarCompra() {
 		this.carrito = new String[cursosComprados][cursosDisponibles[0].length];
 		
 		for (int i = 0; i < cursosComprados; i++) {
-			carrito[i] = carritoSecundario[i];
+			if(yaEstaComprado(i)) {
+				carrito[i] = carritoSecundario[i];				
+			}
 		}
 		
 		int precioTotal = 0;
@@ -102,7 +110,7 @@ public class Tienda {
 		System.out.println("Salir");
 		int index = utilidades.ingresarEntero(1, (cursos.length+1));
 		
-		if(index == (cursos.length + 1) || yaEstaEnElCarrito(index)) {
+		if(index == (cursos.length + 1) || yaEstaComprado(index)) {
 			return;
 		}
 		cursosComprados++;
@@ -130,7 +138,7 @@ public class Tienda {
 	}
 
 
-	private boolean yaEstaEnElCarrito(int index) {
+	private boolean yaEstaComprado(int index) {
 		int i = 0;
 		boolean encontrado = false;
 		
@@ -146,29 +154,39 @@ public class Tienda {
 
 
 	private void calificarCurso() {
-		System.out.println("Que curso quiere calificar");
-		mostrarCursos();
-		int index = utilidades.ingresarEntero(1, (cursos.length+1));
-		
+		int i = 0;
+		while(i < cursosComprados) {
+			System.out.println("Que curso quiere calificar");
+			for (int j = 0; j < cursosComprados; j++) {
+				mostrarCurso(i);
+			}
+			System.out.println((cursosComprados + 1) + ") Salir");
+			int index = utilidades.ingresarEntero(1, (cursosComprados+1));
 			
-		if(index == (cursos.length + 1)) {
-			return;
+				
+			if(index == (cursosComprados + 1)) {
+				return;
+			}
+			
+			cursos[index-1].calificar();
+			i++;
 		}
 		
-		cursos[index-1].calificar();
+		if(cursosComprados == 0) {
+			System.out.println("Usted no ah comprado ningun curso asi que no puede calificar ninguno");
+		}
 	}
 	
 
 	private void mostrarCursoMenorPrecio() {
-		int max = cursos[0].getPrecio();
 		int index = 0;
-		for (int i = 1; i < cursos.length; i++) {
-			if(cursos[i].getPrecio() > max) {
-				max = cursos[i].getPrecio();
-			}
-		}
-		int min = max;
-		for (int i = 0; i < cursos.length; i++) {
+		int testigo = 0;
+		do {
+			testigo++;
+		} while (cursos[testigo].getPrecio() <= 0);
+		
+		int min = testigo;
+		for (int i = testigo; i < cursos.length; i++) {
 			if(cursos[i].getPrecio() != 0 && cursos[i].getPrecio() < min) {
 				min = cursos[i].getPrecio();
 				index = i;
