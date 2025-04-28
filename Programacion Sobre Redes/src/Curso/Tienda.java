@@ -182,10 +182,10 @@ public class Tienda {
 		int index = 0;
 		int testigo = 0;
 		do {
-			testigo++;
+			testigo +=1;
 		} while (cursos[testigo].getPrecio() <= 0);
 		
-		int min = testigo;
+		int min = cursos[testigo].getPrecio();
 		for (int i = testigo; i < cursos.length; i++) {
 			if(cursos[i].getPrecio() != 0 && cursos[i].getPrecio() < min) {
 				min = cursos[i].getPrecio();
@@ -194,6 +194,7 @@ public class Tienda {
 		}
 		
 		mostrarCurso(index);
+		System.out.println("--------------------------------");
 	}
 
 	private void mostrarCursoMayorCalificacion() {
