@@ -5,7 +5,9 @@ public enum Tipo {
 	FUEGO("Fuego"),
 	AGUA("Agua"),
 	VENENO("Veneno"),
-	PLANTA("Planta");
+	PLANTA("Planta"),
+	NORMAL("Normal"),
+	NINGUNO("");
 	
 	private Tipo efectividad;
 	String nombre;
@@ -16,6 +18,8 @@ public enum Tipo {
 		PLANTA.efectividad = AGUA;
 		VENENO.efectividad = PLANTA;
 		AGUA.efectividad = FUEGO;
+		NORMAL.efectividad = NINGUNO;
+		NINGUNO.efectividad = NINGUNO;
 	};
 	
 	private Tipo(String nombre) {
