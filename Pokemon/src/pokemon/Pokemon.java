@@ -20,10 +20,15 @@ public abstract class Pokemon {
 
 		for (String nombre : nombreAtaques) {
 			nombre = nombre.toLowerCase().trim();
-			for (Ataque a : Ataque.values()) {
-				if (a.getNombre().toLowerCase().equals(nombre)) {
-					ataquesEncontrados.add(a);
-					break; // Stop after first match
+
+			int i = 0;
+			boolean salir = false;
+			while (!salir && i < Ataque.values().length) {
+				if (Ataque.values()[i].getNombre().toLowerCase().equals(nombre)) {
+					ataquesEncontrados.add(Ataque.values()[i]);
+					salir = true;
+				} else {
+					i++;
 				}
 			}
 		}
@@ -34,6 +39,7 @@ public abstract class Pokemon {
 		for (int i = 0; i < size; i++) {
 			this.ataques[i] = ataquesEncontrados.get(i);
 		}
+		System.out.println("El obtener ataques ya se termino");
 	}
 
 	
