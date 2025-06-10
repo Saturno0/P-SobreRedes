@@ -1,7 +1,10 @@
 package pokemon;
 
 import java.util.ArrayList;
-import java.util.List;
+import ataque.Ataque;
+import tipo.Tipo;
+import utiles.Utiles;
+
 
 public abstract class Pokemon {
 	protected String nombre;
@@ -9,41 +12,12 @@ public abstract class Pokemon {
 	protected Ataque[] ataques = new Ataque[4];
 	private Tipo tipo;
 	
-	public Pokemon(int vida, String nombre, Tipo tipo) {
+	public Pokemon(int vida, String nombre, Tipo tipo, Ataque[] ataques) {
 		this.vida = vida;
 		this.nombre = nombre;
 		this.tipo = tipo;
+		this.ataques = ataques;
 	}
-	
-	protected void obtenerAtaques(String[] nombreAtaques) {
-		List<Ataque> ataquesEncontrados = new ArrayList<>();
-
-		for (String nombre : nombreAtaques) {
-			nombre = nombre.toLowerCase().trim();
-
-			int i = 0;
-			boolean salir = false;
-			while (!salir && i < Ataque.values().length) {
-				if (Ataque.values()[i].getNombre().toLowerCase().equals(nombre)) {
-					ataquesEncontrados.add(Ataque.values()[i]);
-					salir = true;
-				} else {
-					i++;
-				}
-			}
-		}
-
-		// Limit to max 4 attacks
-		int size = Math.min(ataquesEncontrados.size(), 4);
-		this.ataques = new Ataque[size];
-		for (int i = 0; i < size; i++) {
-			this.ataques[i] = ataquesEncontrados.get(i);
-		}
-		System.out.println("El obtener ataques ya se termino");
-	}
-
-	
-	
 	
 	private void mostrarAtaques() {
 		for (int i = 0; i < this.ataques.length; i++) {
@@ -51,26 +25,51 @@ public abstract class Pokemon {
 		}
 	}
 	
-	public int atacar(int turno) {
+	public int atacar(int turno, Tipo tipoEnemigo) {
 		if(turno==1) {
 			System.out.println("Elija que ataque quiere realizar:");
 			mostrarAtaques();
-			final int INDEX = utiles.Utiles.ingresarEntero(1, this.ataques.length)-1;
+			final int INDEX = Utiles.ingresarEntero(1, this.ataques.length);
 			boolean acierto = calcularAcierto(this.ataques[INDEX]);
 			if(acierto) {
 				System.out.println("Tu pokemon ah acertado y causado " + this.ataques[INDEX].getDaño() + "!!");
-				return this.ataques[INDEX].getDaño();
+				float danio = this.ataques[INDEX].getDaño();
+				danio *= calcularEfectividad(this.ataques[INDEX].getTipo(), tipoEnemigo);
+				return (int) danio;
 			}
 				System.out.println("Uhhh tu pokemon ah fallado :(");
 		} else {
 			int eleccion = utiles.Utiles.randomEntero(this.ataques.length)-1;
 			boolean acierto = calcularAcierto(this.ataques[eleccion]);
-			if(acierto) return this.ataques[eleccion].getDaño();
+			if(acierto) {
+				float danio = this.ataques[eleccion].getDaño();
+				Tipo tipoAtaque = this.ataques[eleccion].getTipo();
+				danio *= calcularEfectividad(tipoAtaque, tipoEnemigo);
+				return (int) danio;
+			}
 		}
 		return 0;
 	}
 	
-	
+
+	private float calcularEfectividad(Tipo tipoAtaque,Tipo tipoEnemigo) {
+		if (tipoAtaque.getEfectividad().equals(tipoEnemigo)) {
+			return 2f;
+		} else {
+			boolean encontrado = false;
+			int i = 0;
+			while(!encontrado && i < tipoAtaque.getPocaEfectividad().size()) {
+				if(tipoAtaque.getPocaEfectividad().get(i).equals(tipoEnemigo)) {
+					encontrado = true;
+				}
+			}
+			if(encontrado) {
+				return 0.5f;
+			}
+		}
+		return 1f;
+	}
+
 	public void mostrarDatos() {
 		System.out.println("Pokemon: " + this.nombre);
 		System.out.println("Vida: " + this.vida);

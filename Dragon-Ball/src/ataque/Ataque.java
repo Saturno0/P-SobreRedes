@@ -22,6 +22,7 @@ public abstract class Ataque {
 		this.probFallo = probFallo;
 	}
 	
+	
 	public int calcularDanio() {
 		int index = calcularProbabilidadDanio();
 		int danioMin = this.danio.get(index)[INDEX_DANIO_MIN];
@@ -79,4 +80,7 @@ public abstract class Ataque {
 		return this.nombre;
 	}
 
+	public Efecto getEfecto() {
+		return efecto;
+	}
 }

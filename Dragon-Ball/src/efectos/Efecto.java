@@ -1,14 +1,9 @@
 package efectos;
 
-public enum Efecto {
-	TAIYOKEN(4),
-	CURACION(1),
-	BARRIER(4),
-	NINGUNO(0);
-	
-	
+public abstract class Efecto {
 	private int turnos;
-	private Efecto(int turnos) {
+	
+	protected Efecto(int turnos) {
 		this.turnos = turnos;
 	}
 	

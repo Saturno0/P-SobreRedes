@@ -1,10 +1,12 @@
 package pokemon;
 
+import ataque.*;
+import tipo.Tipo;
+
 public class Bulbasur extends Pokemon{
-	private String[] nombreAtaques = {"Placaje", "Gruñido" , "Latigo cepa", "Polvo venenoso"};
+	private static Ataque[] ataques= {new Placaje(), new Grunido() , new LatigoCepa(), new PolvoVenenoso()};
 	private static Tipo tipo = Tipo.PLANTA;
 	public Bulbasur() {
-		super(78, "Bulbasur", tipo);
-		obtenerAtaques(nombreAtaques);
+		super(78, "Bulbasur", tipo, ataques);
 	}
 }
