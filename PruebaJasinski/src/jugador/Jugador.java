@@ -10,7 +10,7 @@ public class Jugador {
 	private String nombre;
 	private Mascota mascota;
 	private int monedas = 10;
-	private ArrayList <Comida> comida = new ArrayList<Comida>();;
+	private ArrayList <Comida> comida = new ArrayList<Comida>();
 
 	public Jugador(String nombre) {
 		this.nombre = nombre;
@@ -34,20 +34,29 @@ public class Jugador {
 			if(!this.comida.contains(comida)) {
 				this.comida.add(comida);
 			} else {
-				int index = 0;
-				boolean encontrado = false;
-				while(!encontrado && index < this.comida.size()) {
-					if(this.comida.get(index).equals(comida)) {
-						encontrado = true;
-					} else {
-						index++;
-					}
-				}
-				
+				int index = buscarComida(comida);
 				this.comida.get(index).agregarComida();
 			}
 		}
 	
+	}
+
+	private int buscarComida(Comida comida) {
+		int index = 0;
+		boolean encontrado = false;
+		while(!encontrado && index < this.comida.size()) {
+			if(this.comida.get(index).equals(comida)) {
+				encontrado = true;
+			} else {
+				index++;
+			}
+		}
+		
+		if(!encontrado) {
+			index = -1;
+		}
+		
+		return index;
 	}
 	
 	public void conseguirMascota() {
@@ -72,11 +81,14 @@ public class Jugador {
 	}
 	
 	
-	
 	public void mostrarComida() {
 		for (int i = 0; i < this.comida.size(); i++) {
 			System.out.println((i+1) + ") " + this.comida.get(i).getNombre());
 		}
+	}
+	
+	public void aplicarCodigoEspecial() {
+		this.monedas += 10;
 	}
 	
 	public void mostrarDatos() {
@@ -91,9 +103,6 @@ public class Jugador {
 		return this.monedas;
 	}
 	
-	public void aplicarCodigoEspecial() {
-		this.monedas += 10;
-	}
 	
 	public ArrayList<Comida> getComida() {
 		return comida;

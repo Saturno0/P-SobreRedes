@@ -57,7 +57,7 @@ public class Principal {
 	}
 
 	private static void alimentarMascota(Jugador jugador, Mascota mascota) {
-		int index = elegirComida(jugador);
+		int index = elegirComida(jugador) - 1;
 		int reduccionHambre = jugador.getComida().get(index).getReduccionHambre();
 		mascota.comer(reduccionHambre);
 		jugador.getComida().get(index).comerComida();
